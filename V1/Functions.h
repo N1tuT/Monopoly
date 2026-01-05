@@ -1,6 +1,43 @@
 // Functions.h
+//  -------------------------------------------------------------
+//  Project:    Monopoly
+//  Author:     N1tuT
+//  Date:       05 JAN 2025
+//  Version:    v1.0
+//  -------------------------------------------------------------
+//  Core data definitions for game
+//
+//  File declares all shared game structures
+//  and global state used across project
+//
+//  IMPORTANT:
+//  - file contains declarations only
+//  - all data defined in 'Functions.cpp'
+//  -------------------------------------------------------------
+
+
 #pragma once
 #include <Arduino.h>
+#include <FastLED.h>
+
+// pin assignments
+#define pLedPlayer  22
+#define pLedHouses  23
+
+// LED definitions
+#define numLedPlayer  160
+#define numLedHouses  29
+#define LEDType       WS2812B
+
+extern CRGB playerLeds[numLedPlayer];
+extern CRGB houseLeds[numLedHouses];
+
+uint16_t LEDindex(uint8_t tile);
+
+void setupLEDs();
+void showPlayerPos();
+void movePlayer(int roll);
+void showPropHouse();
 
 // Total number of spaces on board
 #define BOARD_SIZE 40

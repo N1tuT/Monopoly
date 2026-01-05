@@ -1,4 +1,23 @@
 // Functions.cpp
+//  -------------------------------------------------------------
+//  Project:    Monopoly
+//  Author:     N1tuT
+//  Date:       05 JAN 2025
+//  Version:    v1.0
+//  -------------------------------------------------------------
+//  Definitions for all global game data declared in Functions.h
+//  
+//  File contains ACTUAL storage for:
+//  - Board layout & pricing rules
+//  - Property ownership & house counts
+//  - Player states
+//  - Turn tracking
+//
+//  Nothing in file contains game logic
+//  purely data initialisation
+//  -------------------------------------------------------------
+
+
 #include "Functions.h"
 
 // Static board definition
@@ -53,3 +72,76 @@ Player players[PLAYER_COUNT] = {
 // Turn tracking
 // index of current player
 uint8_t currentPlayer = 0;
+
+// LED setups
+CRGB playerLeds[numLedPlayer];
+
+// function to compute all led setups at the start of the game
+void setupLEDs() {
+    FastLED.addLeds<LEDType, pLedPlayer, GRB>(playerLeds, numLedPlayer);
+    FastLED.addLeds<LEDType, pLedHouses, GRB>(houseLeds, numLedHouses);
+    FastLED.clear();
+    FastLED.show();
+};
+
+uint16_t LEDindex (uint8_t  tile) {
+    return (tile * PLAYER_COUNT) + currentPlayer;
+};
+
+// function to show all player positions at start of game
+void showPlayerPos () {
+    FastLED.clear();    // clear buffer
+
+    // local colour array
+    CRGB colours[] = { CRGB::Red, CRGB::Blue, CRGB::Green, CRGB::Yellow};
+
+    // loop through each player
+    for (uint8_t i = 0; i < PLAYER_COUNT; i++) {
+        // LED index for each player on tile 0
+        uint8_t p = 0 + i;
+
+        // set corresponding colour to LED on tile 0
+        if (p < numLedPlayer) {
+            playerLeds[p] = colours[i];
+        }
+    }
+
+    FastLED.show();
+};
+
+void movePlayer(int roll) {
+    // local colour array
+    CRGB colours[] = { CRGB::Red, CRGB::Blue, CRGB::Green, CRGB::Yellow};
+
+    // store old tile, calculate and store new tile
+    uint8_t oldTile = players[currentPlayer].pos;
+    uint8_t newTile = (oldTile + roll);
+    
+    if (newTile >= BOARD_SIZE) {
+        newTile = newTile - BOARD_SIZE;
+    }
+
+    for (int step = 0; step < roll; step++) {
+        uint8_t lastTile = oldTile;
+        oldTile++;
+
+        if (oldTile >= BOARD_SIZE) {
+            oldTile = oldTile - BOARD_SIZE;
+        }
+
+        uint16_t oldLEDIndex = LEDindex(lastTile);
+        uint16_t newLEDIndex = LEDindex(oldTile);
+
+        playerLeds[oldLEDIndex] = CRGB::Black;
+        playerLeds[newLEDIndex] = colours[currentPlayer];
+        
+        delay(100);
+        FastLED.show();
+    }
+
+    players[currentPlayer].pos = newTile;
+};
+
+void showPropHouse() {
+    
+};
