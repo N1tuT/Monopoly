@@ -48,6 +48,17 @@ void showPropHouse();
 // index of player whose turn it currently is
 extern uint8_t currentPlayer;
 
+// player turn logic
+void doTurn();        // contains all player turn logic / functions
+void resolveTile();   // carries out tile logic
+
+// Stores dice roll and if it is a double
+struct DiceResult {
+  uint8_t total;  // sum of dice
+  bool isDouble;  // double flag
+};
+DiceResult rollDice();
+
 // Price table row meanings
 enum PriceRow {
   // ---------------------------------------------------------
@@ -75,6 +86,31 @@ enum PriceRow {
 };
 #define PRICE_ROWS priceRowCount
 
+// Tile type meanings
+enum TileType {
+  //
+  // enum values describe what each row in
+  // BoardData::tileType table represents
+  //
+  // tileType[row][space]
+  // 
+  //  rows:
+  //  - category: action, property, nothing
+  //  - colour:   chonce, chest, tax, SFE, station, utility, (colours), jail
+  //
+  // e.g.
+  //    tileType[Category][10]  ->  category for tile 10
+  //    tileType[Colour][20]    ->  colour for tile 20
+  //
+
+  CATEGORY = 0,
+  COLOUR,
+
+  // Total number of tileType rows
+  tileTypeRows
+};
+#define TILE_TYPE_ROWS tileTypeRows
+
 // Static board data
 struct BoardData {
   // ---------------------------------------------------------
@@ -87,9 +123,12 @@ struct BoardData {
 
   const char* const places[BOARD_SIZE];
   const int prices[PRICE_ROWS][BOARD_SIZE];
+  const char* const tileType[TILE_TYPE_ROWS][BOARD_SIZE];
 
 };
 extern const BoardData board;
+
+int findTileIndex (const char* target) {};
 
 // Dynamic property states
 struct PropertyState {
@@ -125,8 +164,9 @@ struct Player {
   // ---------------------------------------------------------
 
   uint8_t pos;
-  int money;
+  uint32_t money;
   bool sick;
+  uint8_t sickCount;
   bool firstLap;
 
 };

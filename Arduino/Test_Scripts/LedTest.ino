@@ -26,16 +26,16 @@
 
 #define pPlayer 22                                            // data pin for PLAYER LEDs
 #define pHouses 23                                            // data pin for HOUSES LEDs
-#define nLEDPlayer 16                                         // number of LEDs in the PLAYER strip
+#define nLEDPlayer 340                                         // number of LEDs in the PLAYER strip
 #define nLEDHouses 16                                         // number of LEDs in the HOUSES strip
 
 // Define LED colour array and position array
 CRGB colours[4] = {CRGB::Red, CRGB::Blue, CRGB::Green, CRGB::Yellow};
-CRGB pos[nLEDPlayers];                                        // array of all LEDs in the PLAYER strip
-CRGB pos[nLEDHouses];                                         // array of all LEDs in the HOUSES strip
+CRGB pos[nLEDPlayer];                                        // array of all LEDs in the PLAYER strip
+//CRGB pos[nLEDHouses];                                         // array of all LEDs in the HOUSES strip
 
 void setup() {
-  FastLED.addLeds<WS2812B, pPlayer, GRB>(pos, nLedPlayer);    // initiate LED strip
+  FastLED.addLeds<WS2812B, pPlayer, GRB>(pos, nLEDPlayer);    // initiate LED strip
   FastLED.setBrightness(2);
 }
 
@@ -57,17 +57,17 @@ void loop() {
   }
 
   // Loop to turn on all HOUSES LEDs in specific colour
-  int lHouses;
-  for (int i = 0; i < places; i++) {
-    // increment loop by four
-    lHouses = 4 * i;
+  // int lHouses;
+  // for (int i = 0; i < places; i++) {
+  //   // increment loop by four
+  //   lHouses = 4 * i;
 
-    // set each LED as specific colour
-    pos[0 + lHouses] = CRGB::Green;
-    pos[1 + lHouses] = CRGB::Green;
-    pos[2 + lHouses] = CRGB::Green;
-    pos[3 + lHouses] = CRGB::Red;
-  }
+  //   // set each LED as specific colour
+  //   pos[0 + lHouses] = CRGB::Green;
+  //   pos[1 + lHouses] = CRGB::Green;
+  //   pos[2 + lHouses] = CRGB::Green;
+  //   pos[3 + lHouses] = CRGB::Red;
+  // }
 
   FastLED.show();
 }

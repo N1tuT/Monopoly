@@ -1,0 +1,272 @@
+// ---------------------------------------------------
+// File:       boardData.cpp
+// Project:    Monopoly
+// Author:     N1tuT
+// Version:    v1.0
+// ---------------------------------------------------
+
+#include "boardData.h"
+
+const BoardData board = {
+    // ---------------------------------------------------------
+    //  contains all IMMUTABLE board data:
+    //  - Tile names
+    //  - Price tables (purchase, rent, mortgage)
+    //  - Tile types (action, utility, station, property, colours)
+    // ---------------------------------------------------------
+
+    // names
+    { "Go", "Cambridge", "Communal Melons", "Oxford", "Hangover Tax", "King's Cross St", "Harvard", "Chonce", "Yale", "MIT", 
+        "Get Well Soon", "Nottingham", "Electric", "Birmingham", "Warwick", "Euston St", "Durham", "Chonce", "Edinburgh", "Glasgow", 
+        "Student Finance", "Southhampton", "Communal Melons", "Brighton", "Sussex", "Paddington St", "UCL", "KCL", "Water", "Imperial", 
+        "Freshers' Flu", "Cardiff", "Gloucestershire", "Chonce", "Bristol", "Victoria St", "Gas", "Queen Mary", "Groceries Bill", "Bath" },
+
+    // prices
+    {{0, 60,     0,  60,     200,    200,    100,    0,  100,    120,    0,  140,    150,    140,    160,    200,    180,    0,  180,    200,    0,  220,    0,  220,    240,    200,    260,    260,    150,    280,    0,  300,    300,    0,  320,    200,    150,    350,    100,    400},
+    {0, 2,      0,  4,      0,      25,     6,      0,  6,      8,      0,  10,     0,      10,     12,     25,     14,     0,  14,     16,     0,  18,     0,  18,     20,     25,     22,     22,     0,      22,     0,  26,     26,     0,  28,     25,     0,      35,     0,      50},
+    {0, 10,     0,  20,     0,      50,     30,     0,  30,     40,     0,  50,     0,      50,     60,     50,     70,     0,  70,     80,     0,  90,     0,  90,     100,    50,     110,    110,    0,      120,    0,  130,    130,    0,  150,    50,     0,      175,    0,      200},
+    {0, 30,     0,  60,     0,      100,    90,     0,  90,     100,    0,  150,    0,      150,    180,    100,    200,    0,  200,    220,    0,  250,    0,  250,    300,    100,    330,    330,    0,      360,    0,  390,    390,    0,  450,    100,    0,      500,    0,      600},
+    {0, 90,     0,  180,    0,      200,    270,    0,  270,    300,    0,  450,    0,      450,    500,    200,    550,    0,  550,    600,    0,  700,    0,  700,    750,    200,    800,    800,    0,      850,    0,  900,    900,    0,  1000,   200,    0,      1100,   0,      1400},
+    {0, 160,    0,  320,    0,      0,      400,    0,  400,    450,    0,  625,    0,      625,    700,    0,      750,    0,  750,    800,    0,  875,    0,  875,    925,    0,      975,    975,    0,      1025,   0,  1100,   1100,   0,  1200,   0,      0,      1300,   0,      1500},
+    {0, 250,    0,  450,    0,      0,      550,    0,  660,    600,    0,  750,    0,      750,    900,    0,      950,    0,  950,    1000,   0,  1050,   0,  1050,   1100,   0,      1150,   1150,   0,      1200,   0,  1275,   1275,   0,  1400,   0,      0,      1500,   0,      2000},
+    {0, 30,     0,  30,     0,      100,    50,     0,  200,    60,     0,  70,     0,      70,     80,     0,      90,     0,  90,     100,    0,  110,    0,  110,    120,     0,     130,    130,    0,      140,    0,  150,    150,    0,  160,    0,      0,      175,    0,      200}},
+
+    // tile types
+    {
+        {"Action","Property","Action","Property","Action","Property","Property","Action","Property","Property",
+            "NA","Property","Property","Property","Property","Property","Property","Action","Property"},
+        {}
+    }
+
+};
+
+int findTileIndex (const char* target) {
+  for (int i = 0; i < BOARD_SIZE; i++) {
+    if (strcasecmp(board.names[i], target) == 0) {
+        return i;
+    }
+  }
+
+  return -1;
+};
+
+// ---------------------------------------------------
+// File:       boardData.h
+// Project:    Monopoly
+// Author:     N1tuT
+// Version:    v1.0
+// ---------------------------------------------------
+
+#pragma once
+#include "config.h"
+
+enum PriceRow {
+    PRICE = 0,
+    RENT,
+    HOUSE1,
+    HOUSE2,
+    HOUSE3,
+    HOUSE4,
+    HOTEL,
+    MORTGAGE,
+
+    priceRowCount
+};
+constexpr uint8_t PRICE_ROWS = priceRowCount;
+
+enum TileType {
+    CATEGORY = 0,
+    COLOUR,
+
+    tileTypeRows
+};
+constexpr uint8_t TILE_TYPE_ROWS = tileTypeRows;
+
+struct BoardData {
+    const char* const places[BOARD_SIZE];
+    const int prices[PRICE_ROWS][BOARD_SIZE];
+    const char* const tileType[TILE_TYPE_ROWS][BOARD_SIZE];
+};
+extern const BoardData board;
+
+int findTileIndex (const char* target);
+
+// ---------------------------------------------------
+// File:       config.h
+// Project:    Monopoly
+// Author:     N1tuT
+// Version:    v1.0
+// ---------------------------------------------------
+
+#pragma once
+#include <Arduino.h>
+
+// Board & players
+constexpr uint8_t BOARD_SIZE = 40;
+constexpr uint8_t PLAYER_COUNT = 4;
+
+// Pins
+constexpr uint8_t PIN_LED_PLAYER = 22;
+constexpr uint8_t PIN_LED_HOUSES = 23;
+
+// LED config
+constexpr uint16_t NUM_LED_PLAYER = 160;
+constexpr uint16_t NUM_LED_HOUSES = 29;
+
+// ---------------------------------------------------
+// File:       dice.cpp
+// Project:    Monopoly
+// Author:     N1tuT
+// Version:    v1.0
+// ---------------------------------------------------
+
+#include "dice.h"
+
+DiceResult rollDice() {
+    DiceResult d;
+
+    uint8_t die1 = random(1, 7);
+    uint8_t die2 = random(1, 7);
+
+    d.total = die1 + die2;
+    d.isDouble = (die1 == die2);
+
+    return d;
+};
+
+// ---------------------------------------------------
+// File:       dice.h
+// Project:    Monopoly
+// Author:     N1tuT
+// Version:    v1.0
+// ---------------------------------------------------
+
+#pragma once
+#include <Arduino.h>
+
+struct DiceResult {
+    uint8_t total;
+    bool isDouble;
+};
+DiceResult rollDice();
+
+// ---------------------------------------------------
+// File:       gameFlow.cpp
+// Project:    Monopoly
+// Author:     N1tuT
+// Version:    v1.0
+// ---------------------------------------------------
+
+#include "gameFlow.h"
+#include "dice.h"
+
+void doTurn() {
+    if (players[currentPlayer].sick) {
+        if (players[currentPlayer].sickCount >= 3) {
+            players[currentPlayer].money -= 50;
+            players[currentPlayer].pos = findTileIndex("Get Well Soon");
+        }
+    }
+
+    DiceResult roll = rollDice();
+    resolveTile();
+
+    if (roll.isDouble) {
+
+        return;
+    }
+};
+
+void resolveTile() {
+
+};
+
+// ---------------------------------------------------
+// File:       gameFlow.h
+// Project:    Monopoly
+// Author:     N1tuT
+// Version:    v1.0
+// ---------------------------------------------------
+
+#pragma once
+#include "players.h"
+
+void doTurn();
+void resolveTile();
+
+// ---------------------------------------------------
+// File:       LEDs.h
+// Project:    Monopoly
+// Author:     N1tuT
+// Version:    v1.0
+// ---------------------------------------------------
+
+#pragma once
+#include <FastLED.h>
+#include "config.h"
+
+extern CRGB playerLeds[NUM_LED_PLAYER];
+extern CRGB houseLeds[NUM_LED_HOUSES];
+
+uint16_t LEDindex(uint8_t tile);
+
+void setupLEDs();
+void showPlayerPos();
+void movePlayer(int roll);
+void showPropHouse();
+
+// ---------------------------------------------------
+// File:       players.cpp
+// Project:    Monopoly
+// Author:     N1tuT
+// Version:    v1.0
+// ---------------------------------------------------
+
+#include "players.h"
+
+Player players[PLAYER_COUNT] = {
+    {0, 1500, false, 0, true},
+    {0, 1500, false, 0, true},
+    {0, 1500, false, 0, true},  
+    {0, 1500, false, 0, true},
+};
+
+uint8_t currentPlayer = 0;
+
+// ---------------------------------------------------
+// File:       players.h
+// Project:    Monopoly
+// Author:     N1tuT
+// Version:    v1.0
+// ---------------------------------------------------
+
+#pragma once
+#include "config.h"
+
+struct Player {
+    uint8_t pos;
+    uint32_t money;
+    bool sick;
+    uint8_t sickCount;
+    bool firstLap;
+};
+
+extern Player players[PLAYER_COUNT];
+extern uint8_t currentPlayer;
+
+// ---------------------------------------------------
+// File:       propertyState.h
+// Project:    Monopoly
+// Author:     N1tuT
+// Version:    v1.0
+// ---------------------------------------------------
+
+#pragma once
+#include "config.h"
+
+struct PropertyState {
+    int8_t owner[BOARD_SIZE];
+    uint8_t house_num[BOARD_SIZE];
+};
+
+extern PropertyState propertyState;
