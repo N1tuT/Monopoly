@@ -1,0 +1,14 @@
+# VS Code
+.vscode/
+
+# Arduino library
+Libraries/
+
+# Generated text copies
+Pico/TxtFiles/
+**/TxtFiles/
+
+# Python cache files
+__pycache__/
+**/__pycache__/
+*.pyc
