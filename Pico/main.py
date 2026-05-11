@@ -7,6 +7,7 @@ import ErrorTools.errorHandler as eHandler
 import ledHandler as lHandler
 import diceRoll
 import activationHandler as aHandler
+import TurnLogic.posAction as posAct
 
 
 # -------------------------
@@ -88,7 +89,7 @@ else:
             while True:
 
                 # Wait for the dice-roll button.
-                if buttonChecker.waitForButton(buttons) != 2:
+                if buttonChecker.waitForButton(buttons) == 2:
                     continue
 
                 # Roll the dice.
@@ -106,11 +107,24 @@ else:
                 # Move the player by the dice total.
                 lHandler.movePlayer(pos_LED, player, d1 + d2)
 
-                # TODO: handle the board space the player lands on.
+                action = posAct.handlePos(player)
+                if action == "FRESHERS_FLU":
+                    lHandler.arrestPlayer(pos_LED, player)
+
+                if action == "FOR_SALE":
+                    purchase = buttonChecker.waitForButton(buttons)
+                    if purchase == 3:
+                        posAct.buyProp(player)
+                    elif purchase == 2:
+                        continue
+                
+                if action == "UNKNOWN_ACTION":
+                    eHandler.errorFlag("Unknown action detected")
 
                 # If the player did not roll a double, their turn ends.
                 if not double:
-                    break
+                    if buttonChecker.waitForButton(buttons) == 2:
+                        break
 
             # Turn off the current player's active indicator.
             active_pin.low()
