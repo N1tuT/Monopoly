@@ -13,14 +13,16 @@ global red
 global colours
 global jail
 
+brightness = 5
+
 led_off = (0, 0, 0)
-green = (0, 100, 0)
-red = (100, 0, 0)
+green = (0, brightness, 0)
+red = (brightness, 0, 0)
 colours = [
-    (100, 0, 0),
-    (0, 0, 100),
-    (0, 100, 0),
-    (100, 100, 0),
+    (brightness, 0, 0),
+    (0, 0, brightness),
+    (0, brightness, 0),
+    (brightness, brightness, 0),
 ]
 jail = 0    ## this needs updating
 
@@ -57,39 +59,36 @@ def ledRun(leds, strip):
     """
 
     clearLeds(leds)
+    time = 0.025
 
     if strip == 1:
         for x in range(len(leds)):
             leds[x] = colours[x % len(colours)]
             leds.write()
-            sleep(0.1)
+            sleep(time)
             leds[x] = led_off
             leds.write()
-            sleep(0.1)
+            sleep(time)
     elif strip == 2:
         for x in range(len(leds)):
             leds[x] = green
             leds.write()
-            sleep(0.1)
+            sleep(time)
             leds[x] = led_off
             leds.write()
-            sleep(0.1)
+            sleep(time)
     else:
         return "ERROR"
 
 def movePlayer(leds, player, move_amount):
     """
     Move one player from old board position to new board position.
-
-    player: 1-4
-    old: old board position
-    new: new board position
     """
 
     old = players[player]["pos"]
     player_index = player - 1
 
-    move_amount += old % 39
+    move_amount = (move_amount + old) % 40
 
     old_index = old * 4 + player_index
     new_index = move_amount * 4 + player_index
@@ -99,6 +98,22 @@ def movePlayer(leds, player, move_amount):
 
     players[player]["pos"] = move_amount
 
+    leds.write()
+
+def movePlayerTo(leds, player, destination):
+    """
+    Move one player from old board position to a specified destination
+    """
+
+    old = players[player]["pos"]
+    player_index = player - 1
+    old_index = old * + player_index
+    new_index = destination * + player_index
+
+    leds[old_index] = led_off
+    leds[new_index] = players[player]["colour"]
+
+    players[player]["pos"] = destination
     leds.write()
 
 def addHouse(leds, pos):

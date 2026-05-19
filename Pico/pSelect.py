@@ -10,10 +10,11 @@ def pSelectSetup (pins):
     e.g.
     pSelectSetup(12, 13, 14)
     """
-
-    Pin(pins[0], Pin.IN, Pin.PULL_DOWN).value()
-    Pin(pins[1], Pin.IN, Pin.PULL_DOWN).value()
-    Pin(pins[2], Pin.IN, Pin.PULL_DOWN).value()
+    return [
+        Pin(pins[0], Pin.IN, Pin.PULL_DOWN).value(),
+        Pin(pins[1], Pin.IN, Pin.PULL_DOWN).value(),
+        Pin(pins[2], Pin.IN, Pin.PULL_DOWN).value()
+    ]
 
 def pSelectRead (pins):
     """
@@ -21,6 +22,8 @@ def pSelectRead (pins):
 
     Only one pin should be high at a time
     """
+
+    print(pins)
 
     x = pins.count(1)
 

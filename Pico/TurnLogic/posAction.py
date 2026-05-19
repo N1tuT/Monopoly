@@ -2,7 +2,7 @@
 
 from Dictionaries.boardPosDict import board
 from Dictionaries.playerDict import players
-import moveMoney
+from TurnLogic import moveMoney
 
 
 def handlePos(player):
@@ -65,8 +65,16 @@ def buyProp(player):
     """
 
     price = board[pos]["price"]
+    saving = players[player]["money"]
+    
+    if saving < price:
+        return "Too expensive"
+
     moveMoney.payBank(player, price)
     board[pos]["owner"] = player
+    return
+
+
 
 ## ACTION HANDLING ##
 def handleAction(player):

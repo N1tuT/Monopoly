@@ -129,5 +129,4 @@ def findTileIndex(target):
         if board[pos]["name"] == target:
             return pos
 
-    return -1
-
+    return "ERROR"

@@ -12,9 +12,11 @@ def buttonSetup (pins):
     buttonSetup(12, 24, 27)
     """
 
-    Pin(pins[0], Pin.IN, Pin.PULL_DOWN)
-    Pin(pins[1], Pin.IN, Pin.PULL_DOWN)
-    Pin(pins[2], Pin.IN, Pin.PULL_DOWN)
+    return [
+        Pin(pins[0], Pin.IN, Pin.PULL_DOWN),
+        Pin(pins[1], Pin.IN, Pin.PULL_DOWN),
+        Pin(pins[2], Pin.IN, Pin.PULL_DOWN)
+    ]
 
 def buttonRead (pins):
     """
